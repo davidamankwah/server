@@ -18,7 +18,7 @@
   },
   "name": "server",
   "version": "1.0.0",
-  "proxy": "https://server-tyt9.onrender.com",
+  "proxy": "https://frontend-dnnx.onrender.com/",
   "main": "index.js",
   "type": "module",
   "scripts": {
