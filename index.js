@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import paths from "path";
+import pathss from "path";
 import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -32,8 +32,8 @@ dotenv.config();
 // Create Express app
 const app = express();
 const server = http.createServer(app); // Create HTTP server
-app.use(express.static(paths.join(__dirname, "build")));
-app.use('/static', express.static(paths.join(__dirname, 'build//static')));
+//app.use(express.static(paths.join(__dirname, "build")));
+//app.use('/static', express.static(paths.join(__dirname, 'build//static')));
 // Socket.IO setup
 const io = new SocketIOServer(server, { cors: { origin: "*" } }); // Allow all origins for CORS
 
