@@ -15,6 +15,7 @@ import { fileURLToPath } from "url";
 import userRoutes from "./routes/user.js";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/post.js";
+import notifRoutes from "./routes/notification.js";
 import messageRoutes from "./routes/message.js";
 import commentRouter from "./routes/comment.js";
 import replyRouter from "./routes/reply.js";
@@ -76,12 +77,12 @@ app.use("/posts", postRoutes);
 app.use('/posts', commentRouter);
 app.use('/posts', replyRouter);
 app.use('/messages', messageRoutes);
+app.use('/notification', notifRoutes);
 
 // Socket.IO connection handler
 io.on("connection", (socket) => {
   console.log("A user connected: ", socket.id);
 
-  //socket
   // Joining a room
   socket.on("join_room", (data) => {
     socket.join(data);

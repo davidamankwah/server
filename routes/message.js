@@ -1,15 +1,13 @@
-// Import necessary modules
-import express from 'express';
-import { sendMessage, getMessages, deleteMessage } from '../controller/message.js';
-import { verifyToken } from '../middleware/auths.js';
+// message.router.js
+import express from "express";
+import { createMessage, getMessagesByReceiver,getMessagesBySender, deleteMessage } from "../controller/message.js";
 
-// Initialize express router
+
 const router = express.Router();
 
-// Define routes
-router.post('/send', verifyToken, sendMessage);
-router.get('/', verifyToken, getMessages);
-router.delete('/:id', verifyToken, deleteMessage);
+router.get('/sender/:senderId', getMessagesBySender);
+router.get('/receiver/:receiverId', getMessagesByReceiver);
+router.post("/", createMessage);
+router.delete("/:messageId", deleteMessage); 
 
-// Export the router
 export default router;

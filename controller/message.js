@@ -1,49 +1,47 @@
 // Import necessary modules
 import Message from '../models/Message.js';
 
-// Controller function to send a message
-export const sendMessage = async (req, res) => {
+export const createMessage = async (req, res) => {
   try {
     const { sender, receiver, content } = req.body;
-
-    // Create a new message
-    const message = await Message.create({ sender, receiver, content });
-
-    res.status(201).json({ success: true, message });
+    const newMessage = new Message({ sender, receiver, content });
+    await newMessage.save();
+    res.status(201).json(newMessage);
   } catch (error) {
-    console.error('Error sending message:', error);
-    res.status(500).json({ success: false, error: 'Failed to send message' });
+    console.error('Error creating message:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Controller function to get messages
-export const getMessages = async (req, res) => {
+export const getMessagesBySender = async (req, res) => {
   try {
-    // Fetch messages from the database
-    const messages = await Message.find({ $or: [{ sender: req.user._id }, { receiver: req.user._id }] });
-
-    res.status(200).json({ success: true, messages });
+    const { senderId } = req.params;
+    const messages = await Message.find({ sender: senderId }).populate('sender', 'userName'); // Populate the sender's name
+    res.json(messages);
   } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).json({ success: false, error: 'Failed to fetch messages' });
+    console.error('Error fetching messages by sender:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Controller function to delete a message
+export const getMessagesByReceiver = async (req, res) => {
+  try {
+    const { receiverId } = req.params;
+    const messages = await Message.find({ receiver: receiverId }).populate('sender', 'userName'); // Populate the sender's name
+    res.json(messages);
+  } catch (error) {
+    console.error('Error fetching messages by receiver:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const deleteMessage = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    // Find the message by ID and delete it
-    const message = await Message.findByIdAndDelete(id);
-
-    if (!message) {
-      return res.status(404).json({ success: false, error: 'Message not found' });
-    }
-
-    res.status(200).json({ success: true, message });
+    const { messageId } = req.params;
+    await Message.findByIdAndDelete(messageId);
+    res.status(204).end();
   } catch (error) {
     console.error('Error deleting message:', error);
-    res.status(500).json({ success: false, error: 'Failed to delete message' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
